@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const PropertyCard = ({ property, isList, generateTitle }) => {
+const PropertyCard = ({ property, isList, generateTitle, isFavorite, toggleFavorite }) => {
   if (!isList) {
     return (
       <div className="compact-card">
@@ -42,7 +42,12 @@ const PropertyCard = ({ property, isList, generateTitle }) => {
         </div>
         <div className="card-footer-row">
           <div className="card-stats"><span>{property.city}</span><span>• {property.date}</span></div>
-          <button className="action-btn outline-btn">В Избранное</button>
+          <button 
+            className={`action-btn ${isFavorite ? 'primary-btn' : 'outline-btn'}`}
+            onClick={() => toggleFavorite(property.id)}
+          >
+            {isFavorite ? 'В Избранном' : 'В Избранное'}
+          </button>
         </div>
       </div>
     </div>
