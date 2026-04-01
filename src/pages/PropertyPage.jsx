@@ -1,72 +1,57 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { mockProperties, generateTitle } from '../data';
+import { Link } from 'react-router-dom';
 
-const PropertyPage = () => {
-  const { id } = useParams();
-  const property = mockProperties.find(p => p.id === parseInt(id));
-
-  if (!property) {
-    return <div className="no-results"><h2>Объявление не найдено 😔</h2><Link to="/">Вернуться на главную</Link></div>;
+const PropertyCard = ({ property, isList, generateTitle, isFavorite, toggleFavorite }) => {
+  if (!isList) {
+    return (
+      <div className="compact-card">
+        <Link to={`/property/${property.id}`} className="compact-image">
+          <img src={property.img} alt="фото" />
+          <div className="compact-deal-type">{property.dealType}</div>
+        </Link>
+        <div className="compact-info">
+          <div className="compact-price">
+            {property.price.toLocaleString('ru-RU')} ₸ {property.rentPeriod === 'Помесячно' && <span>/ мес</span>}
+          </div>
+          <div className="compact-title">{property.rooms}-комн., {property.area} м²</div>
+          <div className="compact-address">{property.city}, {property.address.split(',')[0]}</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="property-page">
-      <div className="breadcrumbs">
-        <Link to="/">← Вернуться к поиску</Link>
+    <div className="list-card">
+      <div className="list-card-image">
+        <img src={property.img} alt={generateTitle(property)} />
+        <div className="photo-count">📷 {property.photoCount}</div>
       </div>
-
-      <div className="property-layout">
-        <div className="property-main">
-          <div className="property-gallery">
-            <img src={property.img} alt={property.type} className="main-photo" />
-          </div>
-          
-          <div className="property-info-block">
-            <h1 className="property-title">{generateTitle(property)}</h1>
-            <p className="property-address">📍 {property.city}, {property.address} {property.complex && `• ${property.complex}`}</p>
-            
-            <h3 className="section-title">Описание от продавца</h3>
-            <p className="property-desc">{property.description}</p>
-            
-            <h3 className="section-title">Характеристики</h3>
-            <ul className="property-features">
-              <li><strong>Тип жилья:</strong> {property.type}</li>
-              <li><strong>Площадь:</strong> {property.area} м²</li>
-              <li><strong>Этаж:</strong> {property.floor} из {property.totalFloors}</li>
-              <li><strong>Меблирована:</strong> {property.furnished}</li>
-              {property.dealType === 'Аренда' && (
-                <>
-                  <li><strong>Животные:</strong> {property.withPets ? 'Можно' : 'Нельзя'}</li>
-                  <li><strong>Дети:</strong> {property.withKids ? 'Можно' : 'Нельзя'}</li>
-                </>
-              )}
-            </ul>
+      <div className="list-card-content">
+        <div className="card-header-row">
+          <Link to={`/property/${property.id}`} className="card-main-title">{generateTitle(property)}</Link>
+          <div className="card-main-price">
+            {property.price.toLocaleString('ru-RU')} ₸ {property.rentPeriod === 'Помесячно' && <span>за месяц</span>}
           </div>
         </div>
-
-        <div className="property-sidebar">
-          <div className="sidebar-card">
-            <div className="sidebar-price">
-              {property.price.toLocaleString('ru-RU')} ₸
-              <span>{property.dealType === 'Аренда' ? (property.rentPeriod === 'Помесячно' ? ' / месяц' : ' / сутки') : ''}</span>
-            </div>
-            
-            <div className="sidebar-author">
-              <div className="author-avatar">{property.authorType.charAt(0)}</div>
-              <div>
-                <p className="author-name">{property.authorType}</p>
-                <p className="author-status">На сайте с 2024 года</p>
-              </div>
-            </div>
-
-            <button className="primary-btn w-full">Показать телефон</button>
-            <button className="outline-btn w-full mt-10">Написать сообщение</button>
-          </div>
+        <div className="card-address-row">{property.city}, {property.address} {property.complex && `• ${property.complex}`}</div>
+        <div className="card-description">{property.description}</div>
+        <div className="card-meta">
+          <span className="author-badge">{property.authorType}</span>
+          {property.withPets && <span className="feature-badge">🐶 Можно с животными</span>}
+          {property.withKids && <span className="feature-badge">👶 Можно с детьми</span>}
+        </div>
+        <div className="card-footer-row">
+          <div className="card-stats"><span>{property.city}</span><span>• {property.date}</span></div>
+          <button 
+            className={`action-btn ${isFavorite ? 'primary-btn' : 'outline-btn'}`}
+            onClick={() => toggleFavorite(property.id)}
+          >
+            {isFavorite ? 'В Избранном' : 'В Избранное'}
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default PropertyPage;
+export default PropertyCard;
