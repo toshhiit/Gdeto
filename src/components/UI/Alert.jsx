@@ -3,10 +3,10 @@ import { Button } from './Button';
 
 export const Alert = ({ type = 'info', title, message, onClose }) => {
   const typeStyles = {
-    success: 'bg-green-50 border-green-300 text-green-800',
-    error: 'bg-red-50 border-red-300 text-red-800',
-    warning: 'bg-yellow-50 border-yellow-300 text-yellow-800',
-    info: 'bg-blue-50 border-blue-300 text-blue-800',
+    success: 'bg-white border-gray-200 text-gray-900',
+    error: 'bg-white border-gray-200 text-gray-900',
+    warning: 'bg-white border-gray-200 text-gray-900',
+    info: 'bg-white border-gray-200 text-gray-900',
   };
 
   const iconEmoji = {

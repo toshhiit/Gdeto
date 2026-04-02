@@ -1,4 +1,5 @@
 import React from 'react';
+import '../App.css';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -17,23 +18,19 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md text-center">
-            <h1 className="text-3xl font-bold text-red-600 mb-4">Что-то пошло не так</h1>
-            <p className="text-gray-600 mb-6">
+        <div className="error-boundary-container">
+          <div className="error-boundary-card">
+            <h1 className="error-title">Что-то пошло не так</h1>
+            <p className="error-description">
               Произошла непредвиденная ошибка. Пожалуйста, обновите страницу.
             </p>
-            <details className="text-left mb-6 bg-red-50 p-4 rounded border border-red-200">
-              <summary className="font-semibold text-red-700 cursor-pointer">
-                Детали ошибки
-              </summary>
-              <pre className="mt-2 text-sm text-red-600 overflow-auto">
-                {this.state.error?.toString()}
-              </pre>
+            <details className="error-details">
+              <summary>Детали ошибки</summary>
+              <pre>{this.state.error?.toString()}</pre>
             </details>
             <button
               onClick={() => window.location.reload()}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+              className="primary-btn"
             >
               Обновить страницу
             </button>

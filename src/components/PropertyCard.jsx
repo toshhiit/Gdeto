@@ -78,13 +78,13 @@ const PropertyCard = memo(({ property, isList }) => {
             <div className="card-main-price">{formatPrice(property.price)}</div>
           </div>
           <div className="card-address-row">{property.city}, {property.address} {property.complex && `• ${property.complex}`}</div>
-          <div className="card-description">{property.description}</div>
+          
           <div className="card-meta">
             <span className="author-badge">{property.authorType}</span>
             {property.withPets && <span className="feature-badge">🐶 Можно с животными</span>}
             {property.withKids && <span className="feature-badge">👶 Можно с детьми</span>}
           </div>
-          <div className="card-footer-row">
+          <div className="card-footer-row" style={{ marginTop: 'auto', paddingTop: '16px' }}>
             <div className="card-stats"><span>{property.city}</span><span>• {property.date}</span></div>
             <Button
               variant={isFav ? 'primary' : 'outline'}

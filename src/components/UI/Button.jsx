@@ -11,14 +11,14 @@ export const Button = ({
   type = 'button',
   ...props 
 }) => {
-  const baseStyles = 'font-semibold rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = 'font-semibold rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700',
-    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+    primary: 'bg-black text-white hover:bg-gray-800',
+    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200',
     danger: 'bg-red-600 text-white hover:bg-red-700',
-    outline: 'border border-blue-600 text-blue-600 hover:bg-blue-50',
-    ghost: 'text-blue-600 hover:bg-blue-50',
+    outline: 'border border-gray-300 text-gray-800 hover:bg-gray-50',
+    ghost: 'text-gray-800 hover:bg-gray-100',
     success: 'bg-green-600 text-white hover:bg-green-700',
   };
 

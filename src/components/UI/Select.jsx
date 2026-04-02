@@ -14,7 +14,7 @@ export const Select = ({
   return (
     <div className="form-group">
       {label && (
-        <label className="block text-sm font-semibold text-gray-800 mb-2">
+        <label className="block text-sm font-semibold text-gray-900 mb-2">
           {label}
           {required && <span className="text-red-600 ml-1">*</span>}
         </label>
@@ -23,9 +23,9 @@ export const Select = ({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className={`w-full px-4 py-2 border rounded-lg outline-none transition-colors ${
-          error ? 'border-red-500' : 'border-gray-300 focus:border-blue-600'
-        } disabled:bg-gray-100 bg-white ${className}`}
+        className={`w-full px-3 py-2 border rounded outline-none transition-colors text-sm ${
+          error ? 'border-red-500' : 'border-gray-300 focus:border-gray-900'
+        } disabled:bg-gray-50 bg-white ${className}`}
         {...props}
       >
         {options.map((option) => (

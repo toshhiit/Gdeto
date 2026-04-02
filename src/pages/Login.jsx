@@ -54,77 +54,73 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-          {isLogin ? 'Вход в личный кабинет' : 'Регистрация'}
-        </h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
+        <h2>{isLogin ? 'Вход в личный кабинет' : 'Регистрация'}</h2>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
-          {/* Name field - only for registration */}
-          {!isLogin && (
-            <Input
-              label="Имя"
-              placeholder="Иван Иванов"
-              type="text"
-              error={errors.name?.message}
-              {...registerField('name')}
-              required
-            />
-          )}
-          
-          {/* Email field */}
+        {!isLogin && (
           <Input
-            label="Email"
-            placeholder="example@mail.com"
-            type="email"
-            error={errors.email?.message}
-            {...registerField('email')}
+            label="Имя"
+            placeholder="Иван Иванов"
+            type="text"
+            error={errors.name?.message}
+            {...registerField('name')}
             required
           />
-          
-          {/* Password field */}
+        )}
+        
+        <Input
+          label="Email"
+          placeholder="example@mail.com"
+          type="email"
+          error={errors.email?.message}
+          {...registerField('email')}
+          required
+        />
+        
+        <Input
+          label="Пароль"
+          placeholder="••••••••"
+          type="password"
+          error={errors.password?.message}
+          {...registerField('password')}
+          required
+        />
+
+        {/* Ссылка "Забыли пароль" показывается только при входе */}
+        {isLogin && (
+          <div className="form-meta">
+            <a href="#" className="text-sm">Забыли пароль?</a>
+          </div>
+        )}
+
+        {!isLogin && (
           <Input
-            label="Пароль"
+            label="Подтвердите пароль"
             placeholder="••••••••"
             type="password"
-            error={errors.password?.message}
-            {...registerField('password')}
+            error={errors.confirmPassword?.message}
+            {...registerField('confirmPassword')}
             required
           />
+        )}
+        
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          loading={isLoading}
+          className="w-full"
+        >
+          {isLogin ? 'Войти' : 'Зарегистрироваться'}
+        </Button>
 
-          {/* Confirm password - only for registration */}
-          {!isLogin && (
-            <Input
-              label="Подтвердите пароль"
-              placeholder="••••••••"
-              type="password"
-              error={errors.confirmPassword?.message}
-              {...registerField('confirmPassword')}
-              required
-            />
-          )}
-          
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            loading={isLoading}
-            className="w-full"
-          >
-            {isLogin ? 'Войти' : 'Зарегистрироваться'}
-          </Button>
-        </form>
-
-        <p className="auth-switch">
+        <p className="auth-switch text-center">
           {isLogin ? 'Нет аккаунта? ' : 'Уже есть аккаунт? '}
-          <span 
-            onClick={toggleMode}
-            className="text-blue-600 font-semibold cursor-pointer hover:underline"
-          >
+          <span onClick={toggleMode}>
             {isLogin ? 'Создать' : 'Войти'}
           </span>
         </p>
-      </div>
+      </form>
     </div>
   );
 };

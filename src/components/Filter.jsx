@@ -29,141 +29,94 @@ const Filter = ({
   const roomOptions = ['1', '2', '3', '4', '5+'];
 
   return (
-    <div className="search-container">
-      <div className="deal-type-tabs">
-        <button className={`tab-btn ${dealType === 'Аренда' ? 'active' : ''}`} onClick={() => { setDealType('Аренда'); clearAllFilters(); }}>Арендовать</button>
-        <button className={`tab-btn ${dealType === 'Продажа' ? 'active' : ''}`} onClick={() => { setDealType('Продажа'); clearAllFilters(); }}>Купить</button>
+    <div className="search-wrapper">
+      {/* Переключатель Аренда/Продажа */}
+      <div className="deal-tabs">
+        <button className={`tab ${dealType === 'Аренда' ? 'active' : ''}`} onClick={() => setDealType('Аренда')}>Аренда</button>
+        <button className={`tab ${dealType === 'Продажа' ? 'active' : ''}`} onClick={() => setDealType('Продажа')}>Продажа</button>
       </div>
 
-      <div className="advanced-search-box">
-        <div className="filter-row top-row">
+      <div className="main-filter-card">
+        {/* Верхняя строка: основные параметры */}
+        <div className="filter-main-row">
+          <select className="f-select" value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>
+            {kazakhstanCities.map(city => <option key={city} value={city}>{city}</option>)}
+          </select>
+          
+          <select className="f-select" value={propertyType} onChange={e => setPropertyType(e.target.value)}>
+            <option>Квартира</option>
+            <option>Дом</option>
+            <option>Офис</option>
+          </select>
+
           {dealType === 'Аренда' && (
-            <select className="filter-select" value={rentPeriod} onChange={e => setRentPeriod(e.target.value)}>
+            <select className="f-select" value={rentPeriod} onChange={e => setRentPeriod(e.target.value)}>
               <option value="Помесячно">Помесячно</option>
               <option value="Посуточно">Посуточно</option>
             </select>
           )}
-          
-          <select className="filter-select" value={propertyType} onChange={e => setPropertyType(e.target.value)}>
-            <option>Квартира</option>
-            <option>Дом</option>
-            <option>Коммерция</option>
-          </select>
 
-          <div className="rooms-group">
-            {roomOptions.map(r => (
-              <button 
-                key={r} 
-                className={`room-btn ${rooms === r ? 'active' : ''}`}
-                onClick={() => setRooms(rooms === r ? 'Любая' : r)}
-              >
-                {r}
-              </button>
-            ))}
-            <span className="rooms-label">- комн.</span>
-          </div>
-
-          <select className="filter-select" value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>
-            {kazakhstanCities.map(city => <option key={city} value={city}>{city}</option>)}
-          </select>
-
-          <div className="range-inputs price-range">
-            <label>Цена</label>
-            <input type="number" placeholder="От" value={priceFrom} onChange={e => setPriceFrom(e.target.value)} />
-            <span>-</span>
-            <input type="number" placeholder="До" value={priceTo} onChange={e => setPriceTo(e.target.value)} />
-            <span className="currency">₸</span>
-          </div>
+          <button className="search-main-btn" onClick={handleSearch}>
+            Найти ({filteredCount})
+          </button>
         </div>
 
+        {/* Ссылка для раскрытия доп. фильтров */}
+        <div className="filter-actions-row">
+          <span className="toggle-link" onClick={() => setShowAdvanced(!showAdvanced)}>
+            {showAdvanced ? 'Скрыть фильтры ▲' : 'Все фильтры ▼'}
+          </span>
+          <span className="clear-link" onClick={clearAllFilters}>Очистить всё</span>
+        </div>
+
+        {/* Выпадающая панель с доп. фильтрами */}
         {showAdvanced && (
-          <div className="advanced-options">
-            <div className="advanced-grid">
-              <div className="filter-group">
-                <label>Общая площадь, м²</label>
-                <div className="range-inputs">
+          <div className="advanced-panel">
+            <div className="adv-grid">
+              <div className="adv-group">
+                <label>Комнат</label>
+                <div className="room-chips">
+                  {roomOptions.map(r => (
+                    <button 
+                      key={r} 
+                      className={`chip ${rooms === r ? 'active' : ''}`}
+                      onClick={() => setRooms(rooms === r ? 'Любая' : r)}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="adv-group">
+                <label>Цена (₸)</label>
+                <div className="dual-inputs">
+                  <input type="number" placeholder="От" value={priceFrom} onChange={e => setPriceFrom(e.target.value)} />
+                  <input type="number" placeholder="До" value={priceTo} onChange={e => setPriceTo(e.target.value)} />
+                </div>
+              </div>
+
+              <div className="adv-group">
+                <label>Площадь (м²)</label>
+                <div className="dual-inputs">
                   <input type="number" placeholder="От" value={areaFrom} onChange={e => setAreaFrom(e.target.value)} />
-                  <span>-</span>
                   <input type="number" placeholder="До" value={areaTo} onChange={e => setAreaTo(e.target.value)} />
                 </div>
               </div>
+            </div>
 
-              <div className="filter-group">
-                <label>Этаж</label>
-                <div className="range-inputs">
-                  <input type="number" placeholder="От" value={floorFrom} onChange={e => setFloorFrom(e.target.value)} />
-                  <span>-</span>
-                  <input type="number" placeholder="До" value={floorTo} onChange={e => setFloorTo(e.target.value)} />
-                </div>
-                <div className="checkbox-stack mt-2">
-                  <label className="custom-checkbox-label">
-                    <input type="checkbox" checked={notFirstFloor} onChange={e => setNotFirstFloor(e.target.checked)} />
-                    <span className="checkmark"></span> Не первый
-                  </label>
-                  <label className="custom-checkbox-label">
-                    <input type="checkbox" checked={notLastFloor} onChange={e => setNotLastFloor(e.target.checked)} />
-                    <span className="checkmark"></span> Не последний
-                  </label>
-                </div>
-              </div>
-
+            <div className="checkbox-row">
+              <label><input type="checkbox" checked={hasPhoto} onChange={e => setHasPhoto(e.target.checked)} /> С фото</label>
+              <label><input type="checkbox" checked={fromOwner} onChange={e => setFromOwner(e.target.checked)} /> От хозяев</label>
               {dealType === 'Аренда' && (
-                <div className="filter-group">
-                  <label>Квартира меблирована</label>
-                  <select className="filter-select w-full" value={furnished} onChange={e => setFurnished(e.target.value)}>
-                    <option value="Не важно">Не важно</option>
-                    <option value="Да">Да, полностью</option>
-                    <option value="Нет">Нет (пустая)</option>
-                  </select>
-                  <div className="checkbox-stack mt-2">
-                    <label className="custom-checkbox-label">
-                      <input type="checkbox" checked={withPets} onChange={e => setWithPets(e.target.checked)} />
-                      <span className="checkmark"></span> Можно с животными
-                    </label>
-                    <label className="custom-checkbox-label">
-                      <input type="checkbox" checked={withKids} onChange={e => setWithKids(e.target.checked)} />
-                      <span className="checkmark"></span> Можно с детьми
-                    </label>
-                  </div>
-                </div>
+                <>
+                  <label><input type="checkbox" checked={withPets} onChange={e => setWithPets(e.target.checked)} /> Можно с животными</label>
+                  <label><input type="checkbox" checked={withKids} onChange={e => setWithKids(e.target.checked)} /> Можно с детьми</label>
+                </>
               )}
-
-              <div className="filter-group text-search-group">
-                <label>Поиск по тексту</label>
-                <input 
-                  type="text" 
-                  className="text-input w-full" 
-                  placeholder="Например: ЖК Alakol, кирпичный дом..." 
-                  value={searchText} 
-                  onChange={e => setSearchText(e.target.value)} 
-                />
-              </div>
             </div>
           </div>
         )}
-
-        <div className="filter-footer">
-          <div className="footer-left">
-            <button className="toggle-advanced-btn" onClick={() => setShowAdvanced(!showAdvanced)}>
-              {showAdvanced ? 'Скрыть расширенный поиск ▲' : 'Расширенный поиск ▼'}
-            </button>
-            <label className="custom-checkbox-label inline-check">
-              <input type="checkbox" checked={hasPhoto} onChange={e => setHasPhoto(e.target.checked)} />
-              <span className="checkmark"></span> есть фото
-            </label>
-            <label className="custom-checkbox-label inline-check">
-              <input type="checkbox" checked={fromOwner} onChange={e => setFromOwner(e.target.checked)} />
-              <span className="checkmark"></span> от хозяев
-            </label>
-          </div>
-
-          <div className="footer-center">
-            <button className="clear-btn" onClick={clearAllFilters}>✕ Очистить всё</button>
-            <button className="submit-search-btn" onClick={handleSearch}>
-              Показать результаты ({filteredCount})
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
